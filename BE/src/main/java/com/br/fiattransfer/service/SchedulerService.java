@@ -25,10 +25,18 @@ public class SchedulerService {
     private final TransferRepository transferRepository;
 
     public ResponseEntity<GenericResponse<?>> getSchedules() {
-        GenericResponse<String> errorResponse = new GenericResponse<>("200",
-                "Request aceito com sucesso.",
-                null);
-        return new ResponseEntity<>(errorResponse, HttpStatus.ACCEPTED);
+        // Maybe this could be pageable but I don't know yet.
+        try {
+            return new ResponseEntity<>(new GenericResponse<>("200",
+                    "Transferências agendadas recuperadas com sucesso.",
+                    transferRepository.findAll()), HttpStatus.OK);
+        } catch (Exception e) {
+            GenericResponse<String> errorResponse = new GenericResponse<>("500",
+                    "Não foi possível recuperar as transferências agendadas no momento, tente novamente mais tarde.",
+                    null);
+            log.error("{}: {}", errorResponse.getMessage(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public ResponseEntity<GenericResponse<?>> saveSchedule(RequestTransferSchedule transfer) {
