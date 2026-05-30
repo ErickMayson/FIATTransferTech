@@ -11,7 +11,6 @@ public class GenericResponse<T> {
     private final String message;
     private final T data;
 
-    // All-args constructor (mimics the record's canonical constructor)
     public GenericResponse(String status, String message, T data) {
         this.status = status;
         this.message = message;

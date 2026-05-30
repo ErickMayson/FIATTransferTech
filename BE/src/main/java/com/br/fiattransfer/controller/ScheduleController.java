@@ -1,5 +1,6 @@
     package com.br.fiattransfer.controller;
 
+    import com.br.fiattransfer.models.request.RequestTransferSchedule;
     import com.br.fiattransfer.models.response.GenericResponse;
     import com.br.fiattransfer.service.SchedulerService;
     import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,6 +9,8 @@
     import org.springframework.http.MediaType;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
+
+    import javax.validation.Valid;
 
 
     @RestController
@@ -21,10 +24,13 @@
         private final SchedulerService schedulerService;
 
         @RequestMapping(method = RequestMethod.GET, value = "/schedules", produces = MediaType.APPLICATION_JSON_VALUE)
-        @ResponseBody
         public ResponseEntity<GenericResponse<?>> getSchedules(){
-
             return schedulerService.getSchedules();
+        }
+
+        @RequestMapping(method = RequestMethod.POST, value = "/schedules/save", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<GenericResponse<?>> saveSchedule(@Valid @RequestBody RequestTransferSchedule transfer){
+            return schedulerService.saveSchedule(transfer);
         }
 
 
