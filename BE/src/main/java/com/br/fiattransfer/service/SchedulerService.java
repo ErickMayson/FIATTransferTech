@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -25,7 +26,7 @@ public class SchedulerService {
     private final TransferRepository transferRepository;
 
     public ResponseEntity<GenericResponse<?>> getSchedules() {
-        // Maybe this could be pageable but I don't know yet.
+        // Maybe this could be pageable, but I don't know yet.
         try {
             return new ResponseEntity<>(new GenericResponse<>("200",
                     "Transferências agendadas recuperadas com sucesso.",
@@ -33,6 +34,30 @@ public class SchedulerService {
         } catch (Exception e) {
             GenericResponse<String> errorResponse = new GenericResponse<>("500",
                     "Não foi possível recuperar as transferências agendadas no momento, tente novamente mais tarde.",
+                    null);
+            log.error("{}: {}", errorResponse.getMessage(), e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<GenericResponse<?>> cancelSchedule(String uuid) {
+        try {
+            Transfer transfer = transferRepository.findById(UUID.fromString(uuid)).orElseThrow(() -> new InvalidFeeException("Transferência não encontrada para o ID fornecido."));
+            if (transfer.getCanceledAt() != null) {
+                throw new InvalidFeeException("Essa transferência já foi cancelada.");
+            }
+            transfer.setCanceledAt(Instant.now());
+            transferRepository.save(transfer);
+            GenericResponse<String> response = new GenericResponse<>("200",
+                    "Transferência cancelada com sucesso.",
+                    null);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (InvalidFeeException e) {
+            GenericResponse<String> errorResponse = new GenericResponse<>("400", e.getMessage(), null);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            GenericResponse<String> errorResponse = new GenericResponse<>("500",
+                    "Não foi possível cancelar essa transferência no momento, tente novamente mais tarde.",
                     null);
             log.error("{}: {}", errorResponse.getMessage(), e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

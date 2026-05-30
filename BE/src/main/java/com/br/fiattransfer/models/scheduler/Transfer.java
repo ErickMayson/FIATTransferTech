@@ -22,10 +22,10 @@ public class Transfer {
     @Type(type = "uuid-char")
     private UUID id;
 
-    @Column(name = "FIN_TRANSFER_ACCOUNTORIGIN", updatable = false, nullable = false)
+    @Column(name = "FIN_TRANSFER_ACCOUNTORIGIN", updatable = false, nullable = false, length = 10)
     private String accountOrigin;
 
-    @Column(name = "FIN_TRANSFER_ACCOUNTDESTINATION", updatable = false, nullable = false)
+    @Column(name = "FIN_TRANSFER_ACCOUNTDESTINATION", updatable = false, nullable = false, length = 10)
     private String accountDestination;
 
     @Column(name = "FIN_TRANSFER_VALUE", updatable = false, nullable = false, precision = 15, scale = 2)
