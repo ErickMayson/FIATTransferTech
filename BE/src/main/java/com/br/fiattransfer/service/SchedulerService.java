@@ -4,6 +4,7 @@ import com.br.fiattransfer.exception.InvalidFeeException;
 import com.br.fiattransfer.models.enums.TransferFeeRule;
 import com.br.fiattransfer.models.request.RequestTransferSchedule;
 import com.br.fiattransfer.models.response.GenericResponse;
+import com.br.fiattransfer.models.response.TransferResponse;
 import com.br.fiattransfer.models.scheduler.Transfer;
 import com.br.fiattransfer.repositories.TransferRepository;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -26,15 +29,36 @@ public class SchedulerService {
     private final TransferRepository transferRepository;
 
     public ResponseEntity<GenericResponse<?>> getSchedules() {
-        // Maybe this could be pageable, but I don't know yet.
         try {
-            return new ResponseEntity<>(new GenericResponse<>("200",
-                    "Transferências agendadas recuperadas com sucesso.",
-                    transferRepository.findAll()), HttpStatus.OK);
+            List<TransferResponse> transferResponses = transferRepository.findAll()
+                    .stream()
+                    .map(transfer -> new TransferResponse(
+                            transfer.getId(),
+                            transfer.getAccountOrigin(),
+                            transfer.getAccountDestination(),
+                            transfer.getValue(),
+                            transfer.getFeeValue(),
+                            transfer.getTotalValue(),
+                            transfer.getTransferDate(),
+                            transfer.getCreatedAt(),
+                            transfer.getCanceledAt()
+                    ))
+                    .collect(Collectors.toList());
+
+            GenericResponse<List<TransferResponse>> response = new GenericResponse<>(
+                    "200",
+                    "Transferências recuperadas com sucesso.",
+                    transferResponses
+            );
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (Exception e) {
-            GenericResponse<String> errorResponse = new GenericResponse<>("500",
+            GenericResponse<String> errorResponse = new GenericResponse<>(
+                    "500",
                     "Não foi possível recuperar as transferências agendadas no momento, tente novamente mais tarde.",
-                    null);
+                    null
+            );
             log.error("{}: {}", errorResponse.getMessage(), e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -97,10 +121,10 @@ public class SchedulerService {
 
             transferRepository.save(new Transfer(transfer, appliedFee, totalValue));
 
-            GenericResponse<String> errorResponse = new GenericResponse<>("200",
+            GenericResponse<String> errorResponse = new GenericResponse<>("201",
                     "Transferencia agendada com sucesso.",
                     null);
-            return new ResponseEntity<>(errorResponse, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(errorResponse, HttpStatus.CREATED);
 
         } catch (InvalidFeeException e) {
             GenericResponse<String> errorResponse = new GenericResponse<>("400", e.getMessage(), null);

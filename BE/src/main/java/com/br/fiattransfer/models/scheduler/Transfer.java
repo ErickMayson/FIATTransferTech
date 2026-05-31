@@ -12,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "T_FIN_TRANSFER")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
