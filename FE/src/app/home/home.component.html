@@ -1,0 +1,86 @@
+<main class="container">
+  <header class="main-header">
+    <h1>FIATRANSFER</h1>
+  </header>
+
+  <div class="page-body">
+    <div class="alert-banner alert-banner--danger">
+      <strong>Erro:</strong> Não há taxa aplicável para o período selecionado. A transferência não pode ser realizada.
+    </div>
+
+    <div class="grid-layout">
+      <section class="card form-section">
+        <h2>Novo Agendamento</h2>
+        <form id="transferForm">
+
+          <div class="form-group">
+            <label for="sourceAccount">Conta de Origem</label>
+            <input type="text" id="sourceAccount" placeholder="XXXXXXXXXX" maxlength="10">
+          </div>
+
+          <div class="form-group">
+            <label for="destinationAccount">Conta de Destino</label>
+            <input type="text" id="destinationAccount" placeholder="XXXXXXXXXX" maxlength="10">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="transferValue">Valor (R$)</label>
+              <input type="number" id="transferValue" step="0.01" placeholder="0,00">
+            </div>
+
+            <div class="form-group">
+              <label for="transferDate">Data da Transferência</label>
+              <input type="date" id="transferDate">
+            </div>
+          </div>
+
+          <div class="preview-box">
+            <div class="preview-item">
+              <span>Taxa Estimada:</span>
+              <strong>R$ 0,00</strong>
+            </div>
+            <div class="preview-item">
+              <span>Data de Agendamento:</span>
+              <span>30/05/2026</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn--primary">Agendar Transferência</button>
+        </form>
+      </section>
+
+      <section class="card statement-section">
+        <h2>Extrato de Agendamentos</h2>
+        <div class="table-responsive">
+          <table class="statement-table">
+            <thead>
+              <tr>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Valor</th>
+                <th>Taxa</th>
+                <th>Data Transf.</th>
+                <th>Data Agend.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>XXXXXXXXXX</td>
+                <td>XXXXXXXXXX</td>
+                <td>R$ 1.000,00</td>
+                <td class="fee-cell">R$ 28,00</td>
+                <td>05/06/2026</td>
+                <td>30/05/2026</td>
+              </tr>
+
+              <tr class="empty-row">
+                <td colspan="6">Nenhum agendamento encontrado.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

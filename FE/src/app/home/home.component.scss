@@ -1,0 +1,264 @@
+$primary-color: #059669;
+$primary-hover: #047857;
+$bg-color: #F0FDF4;
+$card-bg: #ffffff;
+$text-main: #111827;
+$text-muted: #4b5563;
+$border-color: #d1fae5;
+$danger-color: #ef4444;
+$danger-bg: #fef2f2;
+$font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$radius: 8px;
+$transition: all 0.2s ease-in-out;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: $font-stack;
+  background-color: $bg-color;
+  color: $text-main;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+// The Angular host element needs to fill the viewport too
+app-home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.main-header {
+  background: linear-gradient(135deg, #065F46 0%, #059669 40%, #047857 100%);
+  padding: 1.25rem 2rem;
+  width: 100%;
+  flex-shrink: 0;
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin: 0;
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+}
+
+.page-body {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.alert-banner {
+  display: none;
+  padding: 1rem;
+  border-radius: $radius;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+
+  &--danger {
+    background-color: $danger-bg;
+    color: $danger-color;
+    border-color: lighten($danger-color, 30%);
+    display: block; // shown in template
+  }
+
+  &.is-visible {
+    display: block;
+  }
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  flex: 1;
+
+  @media (min-width: 992px) {
+    grid-template-columns: 4fr 7fr;
+    align-items: start;
+  }
+}
+
+.card {
+  background: $card-bg;
+  border-radius: $radius;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(17, 24, 39, 0.05), 0 2px 4px -1px rgba(17, 24, 39, 0.03);
+  border: 1px solid $border-color;
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid $bg-color;
+    color: $text-main;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: $text-main;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid $border-color;
+    border-radius: $radius;
+    font-family: inherit;
+    font-size: 1rem;
+    color: $text-main;
+    background-color: #ffffff;
+    transition: $transition;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+    }
+  }
+
+  small {
+    display: block;
+    color: $text-muted;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.preview-box {
+  background-color: $bg-color;
+  border-radius: $radius;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid $primary-color;
+
+  .preview-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    span {
+      color: $text-muted;
+    }
+
+    strong {
+      color: $primary-color;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: $radius;
+  border: none;
+  cursor: pointer;
+  transition: $transition;
+  text-align: center;
+
+  &--primary {
+    background-color: $primary-color;
+    color: #ffffff;
+
+    &:hover {
+      background-color: $primary-hover;
+    }
+  }
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.statement-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+
+  thead {
+    background-color: $bg-color;
+    color: $text-main;
+    font-weight: 700;
+  }
+
+  th, td {
+    padding: 1rem;
+    border-bottom: 1px solid $border-color;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    color: $text-main;
+    transition: $transition;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.04);
+    }
+  }
+
+  .fee-cell {
+    color: $danger-color;
+    font-weight: 600;
+  }
+
+  .empty-row {
+    display: none;
+    text-align: center;
+    color: $text-muted;
+    font-style: italic;
+
+    &.is-visible {
+      display: table-row;
+    }
+  }
+}
